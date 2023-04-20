@@ -5,19 +5,13 @@ from django.db.models import Count
 
 
 class PostQuerySet(models.QuerySet):
-    def year(self, year):
-        posts_in_year = self.filter(
-            published_at__year=year
-        ).order_by('published_at')
-        return posts_in_year
-
-    def get_popular_posts(self):
+    def popular(self):
         popular_posts = self.annotate(
             likes_count=Count('likes')
         ).prefetch_related('author').order_by('-likes_count')
         return popular_posts
 
-    def get_posts_with_comments(self):
+    def fetch_with_comments_count(self):
         posts_ids = [post.id for post in self]
         posts_with_comments = Post.objects.\
             filter(id__in=posts_ids).\
