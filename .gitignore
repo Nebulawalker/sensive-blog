@@ -1,6 +1,7 @@
 #Current project
 notes.md
 media/
+settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
