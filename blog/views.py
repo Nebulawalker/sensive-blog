@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from blog.models import Post, Tag
-from django.db.models import Count
 
 
 def serialize_post(post):
@@ -32,10 +31,9 @@ def index(request):
                              .fetch_with_comments_count()
 
     most_fresh_posts = Post.objects \
-                           .annotate(comments_count=Count('comments')) \
                            .prefetch_related('author') \
                            .fetch_tags() \
-                           .order_by('-published_at')[:5]
+                           .fetch_with_comments_count()[:5]
 
     most_popular_tags = Tag.objects.popular()[:5].posts_count()
 
